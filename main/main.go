@@ -23,6 +23,7 @@ func main() {
 	defer file.Close()
 
 	var words []string
+
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		words = append(words, scanner.Text())
@@ -39,7 +40,6 @@ func main() {
 	for i := range guessWord {
 		guessWord[i] = '_'
 	}
-
 	revealedIndices := make([]int, 2) // Révélation des indices
 	for i := 0; i < 2; i++ {
 		unique := false
@@ -73,6 +73,7 @@ func main() {
 	for _, line := range lines {
 		fmt.Println(line)
 	}
+
 	z01.PrintRune('\n')
 	fmt.Printf("Vous avez 10 tentatives pour deviner le mot.")
 	z01.PrintRune('\n')
@@ -135,6 +136,20 @@ func main() {
 
 		fmt.Println("Mot à deviner :", string(guessWord))
 		z01.PrintRune('\n')
+
+		if string(guessWord) == word { // Si le mot est trouvé
+			cmd := exec.Command("clear")
+			cmd.Stdout = os.Stdout
+			cmd.Run()
+			fmt.Println("\nFélicitations ! Vous avez deviné le mot : ", word)
+			if attempts < 10 {
+				fmt.Println("en :", 10-attempts, "tentative")
+				break
+			} else {
+				fmt.Println("Vous avez fait un score parfait !")
+				break
+			}
+		}
 	}
 
 	if attempts == 0 { // Si le mot n'est pas trouvé
@@ -156,7 +171,7 @@ func maj_mot(word, guess string, guessWord []byte) { // Mise à jour du mot
 
 var lines []string
 
-func readLinesFromFile() ([]string, error) { // Lecture du fichier hangman
+func readLinesFromFile() ([]string, error) { // Lecture du fichier hangman.txt
 	file, err := os.Open("hangman.txt")
 	if err != nil {
 		return nil, err
