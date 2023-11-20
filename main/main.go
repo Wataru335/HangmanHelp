@@ -40,7 +40,7 @@ func main() {
 		guessWord[i] = '_'
 	}
 
-	revealedIndices := make([]int, 2) // Révélation de 2 lettres du mot
+	revealedIndices := make([]int, 2) // Révélation des indices
 	for i := 0; i < 2; i++ {
 		unique := false
 		for !unique {
@@ -104,7 +104,7 @@ func main() {
 				fmt.Printf("Il vous reste %d tentatives.\n", attempts)
 				z01.PrintRune('\n')
 			}
-		} else if len(guess) == len(word) && guess != word { // Si le mot est faux
+		} else if len(guess) == len(word) && guess != word { // Si le mot est incorrect
 			var wrongCount int
 			for i := 0; i < len(word); i++ {
 				if word[i] == guess[i] {
@@ -125,7 +125,7 @@ func main() {
 			cmd.Run()
 			fmt.Println("\nFélicitations ! Vous avez deviné le mot : ", word)
 			if attempts < 10 {
-				fmt.Println("en :", 10-attempts, "tentative")
+				fmt.Println("en :", 10-attempts, "tentative(s)")
 				break
 			} else {
 				fmt.Println("Vous avez fait un score parfait !")
@@ -135,20 +135,6 @@ func main() {
 
 		fmt.Println("Mot à deviner :", string(guessWord))
 		z01.PrintRune('\n')
-
-		if string(guessWord) == word { // Si le mot est trouvé
-			cmd := exec.Command("clear")
-			cmd.Stdout = os.Stdout
-			cmd.Run()
-			fmt.Println("\nFélicitations ! Vous avez deviné le mot : ", word)
-			if attempts < 10 {
-				fmt.Println("en :", 10-attempts, "tentative")
-				break
-			} else {
-				fmt.Println("Vous avez fait un score parfait !")
-				break
-			}
-		}
 	}
 
 	if attempts == 0 { // Si le mot n'est pas trouvé
@@ -170,7 +156,7 @@ func maj_mot(word, guess string, guessWord []byte) { // Mise à jour du mot
 
 var lines []string
 
-func readLinesFromFile() ([]string, error) {
+func readLinesFromFile() ([]string, error) { // Lecture du fichier hangman.txt
 	file, err := os.Open("hangman.txt")
 	if err != nil {
 		return nil, err
@@ -188,7 +174,7 @@ func readLinesFromFile() ([]string, error) {
 	return lines, nil
 }
 
-func displayHangman(currentAttempt int) {
+func displayHangman(currentAttempt int) { // Affichage du pendu
 	readLinesFromFile()
 
 	n := len(lines) / 8
