@@ -1,0 +1,89 @@
+func affichage_Hangman(attempts int) { // Affichage du pendu
+	hangman0 := []string{
+		"\n",
+	}
+	hangman1 := []string{
+		"\n\n\n\n\n\n\n\n ========= \n\n",
+	}
+	hangman2 := []string{
+		"\n       |\n       |\n       |\n       |\n       |\n ========= \n\n",
+	}
+	hangman3 := []string{
+		"\n   +---+\n       |\n       |\n       |\n       |\n       |\n ========= \n\n",
+	}
+	hangman4 := []string{
+		"\n   +---+\n   |   |\n       |\n       |\n       |\n       |\n ========= \n\n",
+	}
+	hangman5 := []string{
+		"\n   +---+\n   |   |\n   O   |\n       |\n       |\n       |\n ========= \n\n",
+	}
+	hangman6 := []string{
+		"\n   +---+\n   |   |\n   O   |\n   |   |\n       |\n       |\n ========= \n\n",
+	}
+	hangman7 := []string{
+		"\n   +---+\n   |   |\n   O   |\n  /|   |\n       |\n       |\n ========= \n\n",
+	}
+	hangman8 := []string{
+		"\n   +---+\n   |   |\n   O   |\n  /|\\  |\n       |\n       |\n ========= \n\n",
+	}
+	hangman9 := []string{
+		"\n   +---+\n   |   |\n   O   |\n  /|\\  |\n  /    |\n       |\n ========= \n\n",
+	}
+	hangman10 := []string{
+		"\n   +---+\n   |   |\n   O   |\n  /|\\  |\n  / \\  |\n       |\n ========= \n\n",
+	}
+
+	hangman := [][]string{hangman0, hangman1, hangman2, hangman3, hangman4, hangman5, hangman6, hangman7, hangman8, hangman9, hangman10}
+
+	concatenatedHangman0 := strings.Join(hangman[0], "")
+	concatenatedHangman1 := strings.Join(hangman[1], "")
+	concatenatedHangman2 := strings.Join(hangman[2], "")
+	concatenatedHangman3 := strings.Join(hangman[3], "")
+	concatenatedHangman4 := strings.Join(hangman[4], "")
+	concatenatedHangman5 := strings.Join(hangman[5], "")
+	concatenatedHangman6 := strings.Join(hangman[6], "")
+	concatenatedHangman7 := strings.Join(hangman[7], "")
+	concatenatedHangman8 := strings.Join(hangman[8], "")
+	concatenatedHangman9 := strings.Join(hangman[9], "")
+	concatenatedHangman10 := strings.Join(hangman[10], "")
+
+	if attempts < 0 {
+		attempts = 0
+	}
+	if attempts >= len(hangman) {
+		attempts = len(hangman) - 1
+	}
+	if attempts == 10 {
+		fmt.Println(concatenatedHangman0)
+	}
+	if attempts == 9 {
+		fmt.Println(concatenatedHangman1)
+	}
+	if attempts == 8 {
+		fmt.Println(concatenatedHangman2)
+	}
+	if attempts == 7 {
+		fmt.Println(concatenatedHangman3)
+	}
+	if attempts == 6 {
+		fmt.Println(concatenatedHangman4)
+	}
+	if attempts == 5 {
+		fmt.Println(concatenatedHangman5)
+	}
+	if attempts == 4 {
+		fmt.Println(concatenatedHangman6)
+	}
+	if attempts == 3 {
+		fmt.Println(concatenatedHangman7)
+	}
+	if attempts == 2 {
+		fmt.Println(concatenatedHangman8)
+	}
+	if attempts == 1 {
+		fmt.Println(concatenatedHangman9)
+	}
+	if attempts == 0 {
+		fmt.Println(concatenatedHangman10)
+	}
+}

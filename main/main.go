@@ -70,6 +70,9 @@ func main() {
 	attempts := 10 // Nombre de tentatives
 
 	fmt.Println("\nMot à deviner :", string(guessWord))
+	for _, line := range lines {
+		fmt.Println(line)
+	}
 	z01.PrintRune('\n')
 	fmt.Printf("Vous avez 10 tentatives pour deviner le mot.")
 	z01.PrintRune('\n')
@@ -97,6 +100,7 @@ func main() {
 				fmt.Println("\nLa lettre n'est pas présente dans le mot.")
 				z01.PrintRune('\n')
 				attempts--
+				displayHangman(10 - attempts)
 				fmt.Printf("Il vous reste %d tentatives.\n", attempts)
 				z01.PrintRune('\n')
 			}
@@ -131,7 +135,6 @@ func main() {
 
 		fmt.Println("Mot à deviner :", string(guessWord))
 		z01.PrintRune('\n')
-		affichage_Hangman(attempts)
 
 		if string(guessWord) == word { // Si le mot est trouvé
 			cmd := exec.Command("clear")
@@ -153,7 +156,7 @@ func main() {
 		cmd.Stdout = os.Stdout
 		cmd.Run()
 		fmt.Println("\nDésolé, vous avez épuisé toutes vos tentatives. Vous êtes désormais pendu(e). \nLe mot à deviner était :", word)
-		affichage_Hangman(attempts)
+		displayHangman(10 - attempts)
 	}
 }
 
@@ -165,92 +168,42 @@ func maj_mot(word, guess string, guessWord []byte) { // Mise à jour du mot
 	}
 }
 
-func affichage_Hangman(attempts int) { // Affichage du pendu
-	hangman0 := []string{
-		"\n",
+var lines []string
+
+func readLinesFromFile() ([]string, error) {
+	file, err := os.Open("hangman.txt")
+	if err != nil {
+		return nil, err
 	}
-	hangman1 := []string{
-		"\n\n\n\n\n\n\n\n ========= \n\n",
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		lines = append(lines, scanner.Text())
 	}
-	hangman2 := []string{
-		"\n       |\n       |\n       |\n       |\n       |\n ========= \n\n",
-	}
-	hangman3 := []string{
-		"\n   +---+\n       |\n       |\n       |\n       |\n       |\n ========= \n\n",
-	}
-	hangman4 := []string{
-		"\n   +---+\n   |   |\n       |\n       |\n       |\n       |\n ========= \n\n",
-	}
-	hangman5 := []string{
-		"\n   +---+\n   |   |\n   O   |\n       |\n       |\n       |\n ========= \n\n",
-	}
-	hangman6 := []string{
-		"\n   +---+\n   |   |\n   O   |\n   |   |\n       |\n       |\n ========= \n\n",
-	}
-	hangman7 := []string{
-		"\n   +---+\n   |   |\n   O   |\n  /|   |\n       |\n       |\n ========= \n\n",
-	}
-	hangman8 := []string{
-		"\n   +---+\n   |   |\n   O   |\n  /|\\  |\n       |\n       |\n ========= \n\n",
-	}
-	hangman9 := []string{
-		"\n   +---+\n   |   |\n   O   |\n  /|\\  |\n  /    |\n       |\n ========= \n\n",
-	}
-	hangman10 := []string{
-		"\n   +---+\n   |   |\n   O   |\n  /|\\  |\n  / \\  |\n       |\n ========= \n\n",
+	if err := scanner.Err(); err != nil {
+		return nil, err
 	}
 
-	hangman := [][]string{hangman0, hangman1, hangman2, hangman3, hangman4, hangman5, hangman6, hangman7, hangman8, hangman9, hangman10}
+	return lines, nil
+}
 
-	concatenatedHangman0 := strings.Join(hangman[0], "")
-	concatenatedHangman1 := strings.Join(hangman[1], "")
-	concatenatedHangman2 := strings.Join(hangman[2], "")
-	concatenatedHangman3 := strings.Join(hangman[3], "")
-	concatenatedHangman4 := strings.Join(hangman[4], "")
-	concatenatedHangman5 := strings.Join(hangman[5], "")
-	concatenatedHangman6 := strings.Join(hangman[6], "")
-	concatenatedHangman7 := strings.Join(hangman[7], "")
-	concatenatedHangman8 := strings.Join(hangman[8], "")
-	concatenatedHangman9 := strings.Join(hangman[9], "")
-	concatenatedHangman10 := strings.Join(hangman[10], "")
+func displayHangman(currentAttempt int) {
+	readLinesFromFile()
 
-	if attempts < 0 {
-		attempts = 0
+	n := len(lines) / 8
+	if currentAttempt >= 1 && currentAttempt < n {
+		startIndex := currentAttempt * 8
+		endIndex := (currentAttempt + 1) * 8
+		if endIndex > len(lines) {
+			endIndex = len(lines)
+		}
+
+		for i := startIndex; i < endIndex; i++ {
+			fmt.Println(lines[i])
+		}
+	} else {
+		fmt.Println("Invalid value for 'currentAttempt'.")
 	}
-	if attempts >= len(hangman) {
-		attempts = len(hangman) - 1
-	}
-	if attempts == 10 {
-		fmt.Println(concatenatedHangman0)
-	}
-	if attempts == 9 {
-		fmt.Println(concatenatedHangman1)
-	}
-	if attempts == 8 {
-		fmt.Println(concatenatedHangman2)
-	}
-	if attempts == 7 {
-		fmt.Println(concatenatedHangman3)
-	}
-	if attempts == 6 {
-		fmt.Println(concatenatedHangman4)
-	}
-	if attempts == 5 {
-		fmt.Println(concatenatedHangman5)
-	}
-	if attempts == 4 {
-		fmt.Println(concatenatedHangman6)
-	}
-	if attempts == 3 {
-		fmt.Println(concatenatedHangman7)
-	}
-	if attempts == 2 {
-		fmt.Println(concatenatedHangman8)
-	}
-	if attempts == 1 {
-		fmt.Println(concatenatedHangman9)
-	}
-	if attempts == 0 {
-		fmt.Println(concatenatedHangman10)
-	}
+	return
 }
