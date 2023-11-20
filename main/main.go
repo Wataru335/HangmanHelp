@@ -156,7 +156,7 @@ func maj_mot(word, guess string, guessWord []byte) { // Mise à jour du mot
 
 var lines []string
 
-func readLinesFromFile() ([]string, error) { // Lecture du fichier hangman.txt
+func readLinesFromFile() ([]string, error) { // Lecture du fichier hangman
 	file, err := os.Open("hangman.txt")
 	if err != nil {
 		return nil, err
