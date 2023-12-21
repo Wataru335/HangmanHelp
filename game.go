@@ -14,8 +14,8 @@ import (
 
 func Game() {
 
-	filename := os.Args[1] // Récupération du nom du fichier passé en argument
-	file, err := os.Open(filename)
+	// filename := os.Args[1] // Récupération du nom du fichier passé en argument
+	file, err := os.Open("words.txt")
 	if err != nil {
 		fmt.Printf("Erreur lors de l'ouverture du fichier : %v\n", err)
 		os.Exit(1)
