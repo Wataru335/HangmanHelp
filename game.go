@@ -1,4 +1,4 @@
-package main
+package hangmanhelp
 
 import (
 	"bufio"
@@ -12,7 +12,7 @@ import (
 	"github.com/01-edu/z01"
 )
 
-func main() {
+func Game() {
 
 	filename := os.Args[1] // Récupération du nom du fichier passé en argument
 	file, err := os.Open(filename)
@@ -70,9 +70,6 @@ func main() {
 	attempts := 10 // Nombre de tentatives
 
 	fmt.Println("\nMot à deviner :", string(guessWord))
-	for _, line := range lines {
-		fmt.Println(line)
-	}
 
 	z01.PrintRune('\n')
 	fmt.Printf("Vous avez 10 tentatives pour deviner le mot.")
@@ -96,12 +93,12 @@ func main() {
 			if strings.Contains(word, guess) {
 				fmt.Println("\nLa lettre est présente dans le mot !")
 				z01.PrintRune('\n')
-				maj_mot(word, guess, guessWord)
+				Maj_mot(word, guess, guessWord)
 			} else {
 				fmt.Println("\nLa lettre n'est pas présente dans le mot.")
 				z01.PrintRune('\n')
 				attempts--
-				displayHangman(10 - attempts)
+				DisplayHangman(10 - attempts)
 				fmt.Printf("Il vous reste %d tentatives.\n", attempts)
 				z01.PrintRune('\n')
 			}
@@ -157,54 +154,6 @@ func main() {
 		cmd.Stdout = os.Stdout
 		cmd.Run()
 		fmt.Println("\nDésolé, vous avez épuisé toutes vos tentatives. Vous êtes désormais pendu(e). \nLe mot à deviner était :", word)
-		displayHangman(10 - attempts)
+		DisplayHangman(10 - attempts)
 	}
-}
-
-func maj_mot(word, guess string, guessWord []byte) { // Mise à jour du mot
-	for i := 0; i < len(word); i++ {
-		if word[i] == guess[0] {
-			guessWord[i] = guess[0]
-		}
-	}
-}
-
-var lines []string
-
-func readLinesFromFile() ([]string, error) { // Lecture du fichier hangman.txt
-	file, err := os.Open("hangman.txt")
-	if err != nil {
-		return nil, err
-	}
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		lines = append(lines, scanner.Text())
-	}
-	if err := scanner.Err(); err != nil {
-		return nil, err
-	}
-
-	return lines, nil
-}
-
-func displayHangman(currentAttempt int) { // Affichage du pendu
-	readLinesFromFile()
-
-	n := len(lines) / 8
-	if currentAttempt >= 1 && currentAttempt < n {
-		startIndex := currentAttempt * 8
-		endIndex := (currentAttempt + 1) * 8
-		if endIndex > len(lines) {
-			endIndex = len(lines)
-		}
-
-		for i := startIndex; i < endIndex; i++ {
-			fmt.Println(lines[i])
-		}
-	} else {
-		fmt.Println("Invalid value for 'currentAttempt'.")
-	}
-	return
 }
