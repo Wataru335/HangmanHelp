@@ -5,19 +5,14 @@ import (
 	"fmt"
 	"math/rand"
 	"os"
-	"os/exec"
 	"strings"
 	"time"
-
-	"github.com/01-edu/z01"
 )
 
 func Game() {
 
-	// filename := os.Args[1] // Récupération du nom du fichier passé en argument
 	file, err := os.Open("words.txt")
 	if err != nil {
-		fmt.Printf("Erreur lors de l'ouverture du fichier : %v\n", err)
 		os.Exit(1)
 	}
 	defer file.Close()
@@ -29,7 +24,6 @@ func Game() {
 		words = append(words, scanner.Text())
 	}
 	if err := scanner.Err(); err != nil {
-		fmt.Printf("Erreur lors de la lecture du fichier : %v\n", err)
 		os.Exit(1)
 	}
 
@@ -69,21 +63,11 @@ func Game() {
 	guessedLetters := make(map[string]bool)
 	attempts := 10 // Nombre de tentatives
 
-	fmt.Println("\nMot à deviner :", string(guessWord))
-
-	z01.PrintRune('\n')
-	fmt.Printf("Vous avez 10 tentatives pour deviner le mot.")
-	z01.PrintRune('\n')
-
 	for attempts > 0 {
-		fmt.Println("--------------------------------------------------")
-		fmt.Print("\nSuggérez une lettre ou devinez le mot complet : ")
 		var guess string
 		fmt.Scanln(&guess)
 
 		if guessedLetters[guess] {
-			fmt.Println("Vous avez déjà entré cette lettre ou ce mot. Veuillez choisir une autre lettre ou mot.")
-			z01.PrintRune('\n')
 			continue
 		}
 
@@ -91,16 +75,10 @@ func Game() {
 
 		if len(guess) == 1 {
 			if strings.Contains(word, guess) {
-				fmt.Println("\nLa lettre est présente dans le mot !")
-				z01.PrintRune('\n')
 				Maj_mot(word, guess, guessWord)
 			} else {
-				fmt.Println("\nLa lettre n'est pas présente dans le mot.")
-				z01.PrintRune('\n')
 				attempts--
 				DisplayHangman(10 - attempts)
-				fmt.Printf("Il vous reste %d tentatives.\n", attempts)
-				z01.PrintRune('\n')
 			}
 		} else if len(guess) == len(word) && guess != word { // Si le mot est incorrect
 			var wrongCount int
@@ -111,49 +89,7 @@ func Game() {
 					wrongCount++
 				}
 			}
-
-			fmt.Println("\nLe mot complet n'est pas correct. Vous avez fait", wrongCount, "erreurs.")
-			z01.PrintRune('\n')
 			attempts -= wrongCount
-			fmt.Printf("Il vous reste %d tentatives.\n", attempts)
-			z01.PrintRune('\n')
-		} else if len(guess) == len(word) && guess == word {
-			cmd := exec.Command("clear")
-			cmd.Stdout = os.Stdout
-			cmd.Run()
-			fmt.Println("\nFélicitations ! Vous avez deviné le mot : ", word)
-			if attempts < 10 {
-				fmt.Println("en :", 10-attempts, "tentative(s)")
-				break
-			} else {
-				fmt.Println("Vous avez fait un score parfait !")
-				break
-			}
 		}
-
-		fmt.Println("Mot à deviner :", string(guessWord))
-		z01.PrintRune('\n')
-
-		if string(guessWord) == word { // Si le mot est trouvé
-			cmd := exec.Command("clear")
-			cmd.Stdout = os.Stdout
-			cmd.Run()
-			fmt.Println("\nFélicitations ! Vous avez deviné le mot : ", word)
-			if attempts < 10 {
-				fmt.Println("en :", 10-attempts, "tentative")
-				break
-			} else {
-				fmt.Println("Vous avez fait un score parfait !")
-				break
-			}
-		}
-	}
-
-	if attempts == 0 { // Si le mot n'est pas trouvé
-		cmd := exec.Command("clear")
-		cmd.Stdout = os.Stdout
-		cmd.Run()
-		fmt.Println("\nDésolé, vous avez épuisé toutes vos tentatives. Vous êtes désormais pendu(e). \nLe mot à deviner était :", word)
-		DisplayHangman(10 - attempts)
 	}
 }
